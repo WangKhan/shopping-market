@@ -19,6 +19,7 @@ import Rank from '@/pages/Home/Rank'
 import Like from '@/pages/Home/Like'
 import Floor from '@/pages/Home/Floor'
 import Brand from '@/pages/Home/Brand'
+import {mapState} from 'vuex'
 export default {
   data() {
     return {
@@ -32,6 +33,14 @@ export default {
     Like,
     Floor,
     Brand
+  },
+  computed:{
+    ...mapState(['count'])
+  },
+  methods:{
+    add(){
+      this.$store.dispatch('add')
+    },
   }
 }
 </script>

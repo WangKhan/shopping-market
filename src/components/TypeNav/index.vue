@@ -1696,6 +1696,9 @@
 <script>
 export default {
   name:'TypeNav',
+  mounted(){
+    this.$store.dispatch('categoryList')
+  },
   data () {
     return {
 
