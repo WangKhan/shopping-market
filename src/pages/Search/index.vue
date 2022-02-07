@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    我是搜索
+    <TypeNav/>
   </div>
 </template>
 
@@ -12,8 +12,7 @@ export default {
     }
   },
   components: {
-
-  }
+  },
 }
 </script>
 

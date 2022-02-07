@@ -1,3 +1,4 @@
+//轮播图组件
 <template>
   <div class="list-container">
     <div class="sortList clearfix">

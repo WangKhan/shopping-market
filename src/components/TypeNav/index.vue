@@ -2,49 +2,57 @@
   <div class="container">
     <div class="type-nav">
       <div class="container">
-        <div @mouseleave="reset">
+        <div @mouseleave="reset"
+             @mouseenter="enterShow">
           <h2 class="all">全部商品分类</h2>
-          <nav class="nav">
-            <a href="###">服装城</a>
-            <a href="###">美妆馆</a>
-            <a href="###">尚品汇超市</a>
-            <a href="###">全球购</a>
-            <a href="###">闪购</a>
-            <a href="###">团购</a>
-            <a href="###">有趣</a>
-            <a href="###">秒杀</a>
-          </nav>
-          <div class="sort">
-            <div class="all-sort-list2">
-              <div class="item"
-                   v-for="(c1,index) in categoryList.slice(0,16)"
-                   :key=index
-                   :class="{cur:currentindex==index}">
-                <h3 @mouseenter="changeIndex(index)"
-                    >
-                  <a href="">{{c1.categoryName}}</a>
-                </h3>
-                <div class="item-list clearfix">
-                  <div class="subitem">
-                    <dl class="fore"
-                        v-for="c2 in c1.categoryChild"
-                        :key=c2.categoryId>
-                      <dt>
-                        <a href="">{{c2.categoryName}}</a>
-                      </dt>
-                      <dd>
-                        <em v-for='c3 in c2.categoryChild'
-                            :key=c3.categoryId>
-                          <a href="">{{c3.categoryName}}</a>
-                        </em>
-                      </dd>
-                    </dl>
+          <transition name='sort'>
+            <div class="sort" v-show="show">
+              <div class="all-sort-list2"
+                   @click="goSearch">
+                <div class="item"
+                     v-for="(c1,index) in categoryList.slice(0,16)"
+                     :key=index
+                     :class="{cur:currentindex==index}">
+                  <h3 @mouseenter="changeIndex(index)">
+                    <a :data-categoryName='c1.categoryName'
+                       :data-category1id='c1.categoryName'>{{c1.categoryName}}</a>
+                  </h3>
+                  <div class="item-list clearfix"
+                       :style="{display:currentindex==index?'block':'none'}">
+                    <div class="subitem">
+                      <dl class="fore"
+                          v-for="c2 in c1.categoryChild"
+                          :key=c2.categoryId>
+                        <dt>
+                          <a :data-categoryName='c2.categoryName'
+                             :data-category2id='c2.categoryName'>{{c2.categoryName}}</a>
+                        </dt>
+                        <dd>
+                          <em v-for='c3 in c2.categoryChild'
+                              :key=c3.categoryId>
+                            <a :data-categoryName='c3.categoryName'
+                               :data-category3id='c3.categoryName'>{{c3.categoryName}}</a>
+                          </em>
+                        </dd>
+                      </dl>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
+          </transition>
         </div>
+        <nav class="nav">
+          <a href="###">服装城</a>
+          <a href="###">美妆馆</a>
+          <a href="###">尚品汇超市</a>
+          <a href="###">全球购</a>
+          <a href="###">闪购</a>
+          <a href="###">团购</a>
+          <a href="###">有趣</a>
+          <a href="###">秒杀</a>
+        </nav>
+
       </div>
     </div>
   </div>
@@ -52,14 +60,19 @@
 
 <script>
 import { mapState } from 'vuex'
+import throttle from 'lodash/throttle'
 export default {
   name: 'TypeNav',
   mounted () {
-    this.$store.dispatch('categoryList')
+    
+    if (this.$route.path != '/home') {
+      this.show = false
+    }
   },
   data () {
     return {
       currentindex: -1,
+      show: true
     }
   },
   components: {
@@ -69,11 +82,38 @@ export default {
     ...mapState(['categoryList'])
   },
   methods: {
-    changeIndex (index) {
+    changeIndex: throttle(function (index) {
       this.currentindex = index
-    },
+    }, 50),
     reset () {
       this.currentindex = -1
+      if (this.$route.path != '/home') this.show = false
+    },
+    goSearch (event) {
+      //时间委托如何确定子节点的类型和子节点需要的参数
+      let { categoryname, category1id, category2id, category3id } = event.target.dataset
+      let location = { name: 'search' }
+      let query = { categoryName: categoryname }
+      if (categoryname) {
+        if (category1id) {
+          query.category1Id = category1id
+        }
+        else if (category2id) {
+          query.category1Id = category1id
+        }
+        else {
+          query.category1Id = category1id
+        }
+        
+          location.params=this.$route.params
+          location.query = query
+          this.$router.push(location)
+        
+        
+      }
+    },
+    enterShow () {
+      this.show = true
     }
   }
 }
@@ -192,14 +232,26 @@ export default {
               }
             }
           }
-
-          &:hover {
-            .item-list {
-              display: block;
-            }
-          }
         }
       }
+    }
+    .sort-enter {
+      height: 0px;
+    }
+    .sort-enter-to {
+      height: 461px;
+    }
+    .sort-enter-active {
+      transition: all 0.2s linear;
+    }
+    .sort-leave{
+      height: 461px;
+    }
+    .sort-leave-to{
+      height: 0px;
+    }
+    .sort-leave-active{
+      transition: all 0.2s linear;
     }
   }
 }

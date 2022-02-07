@@ -1,6 +1,5 @@
 <template>
   <div class="container">
-    我是首页
     <TypeNav/>
     <ListContainer/>
     <TodayRecommend/>
