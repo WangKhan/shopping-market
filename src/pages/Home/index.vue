@@ -33,7 +33,10 @@ export default {
     Brand
   },
   computed:{
-    ...mapState(['floor'])
+    ...mapState({
+      floor:(state)=> state.home.floor
+    }
+    )
   },
   mounted(){
     this.$store.dispatch('getFloor')

@@ -79,7 +79,9 @@ export default {
 
   },
   computed: {
-    ...mapState(['categoryList'])
+    ...mapState({
+      categoryList:(state)=>state.home.categoryList
+    })
   },
   methods: {
     changeIndex: throttle(function (index) {
@@ -242,16 +244,7 @@ export default {
       height: 461px;
     }
     .sort-enter-active {
-      transition: all 0.2s linear;
-    }
-    .sort-leave{
-      height: 461px;
-    }
-    .sort-leave-to{
-      height: 0px;
-    }
-    .sort-leave-active{
-      transition: all 0.2s linear;
+      transition: all 0.3s linear;
     }
   }
 }

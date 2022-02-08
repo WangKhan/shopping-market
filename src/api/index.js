@@ -15,3 +15,5 @@ export const reqBannerList =()=>{
 export const reqFloor =()=>{
   return mockrequests({url:'/floor'})
 }
+
+export const reqGetSearchInfo = (params)=>requests({url:'/list',method:'post',data:params})
