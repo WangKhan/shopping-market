@@ -1,10 +1,11 @@
 import Vue from "vue";
 import Vuex from 'vuex';
-import { reqCategoryList,reqBannerList } from '@/api';
+import { reqCategoryList,reqBannerList,reqFloor } from '@/api';
 Vue.use(Vuex)
 const state = {
   categoryList: [],
-  bannerList:[]
+  bannerList:[],
+  floor:[]
 };
 const mutations = {
   CATEGORYLIST (state, data) {
@@ -12,6 +13,9 @@ const mutations = {
   },
   BANNERLIST(state,data){
     state.bannerList=data
+  },
+  FLOOR(state,data){
+    state.floor=data
   }
 };
 const actions = {
@@ -25,6 +29,12 @@ const actions = {
     let result=await reqBannerList();
     if(result.code==200){
       commit('BANNERLIST',result.data)
+    }
+  },
+  async getFloor({commit}){
+    let result = await reqFloor();
+    if(result.code==200){
+      commit('FLOOR',result.data)
     }
   }
 };

@@ -11,3 +11,7 @@ export const reqCategoryList= ()=>{
 export const reqBannerList =()=>{
   return mockrequests({url:'/banner'})
 }
+
+export const reqFloor =()=>{
+  return mockrequests({url:'/floor'})
+}

@@ -5,8 +5,7 @@
     <TodayRecommend/>
     <Rank/>
     <Like/>
-    <Floor/>
-    <Floor/>
+    <Floor v-for="(fl,index) in floor" :key='fl.id' :list='fl'/>
     <Brand/>
   </div>
 </template>
@@ -34,12 +33,10 @@ export default {
     Brand
   },
   computed:{
-    ...mapState(['count'])
+    ...mapState(['floor'])
   },
-  methods:{
-    add(){
-      this.$store.dispatch('add')
-    },
+  mounted(){
+    this.$store.dispatch('getFloor')
   }
 }
 </script>
