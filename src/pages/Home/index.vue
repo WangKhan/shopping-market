@@ -5,7 +5,7 @@
     <TodayRecommend/>
     <Rank/>
     <Like/>
-    <Floor v-for="(fl,index) in floor" :key='fl.id' :list='fl'/>
+    <Floor v-for="(fl) in floor" :key='fl.id' :list='fl'/>
     <Brand/>
   </div>
 </template>
