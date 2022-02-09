@@ -1,19 +1,18 @@
 import { reqGetSearchInfo } from "@/api";
 
 const state={
-  searchInfo:{}
+  searchList:{}
 }
 
 const mutations={
   GETSEARCHINFO(state,data){
-    state.searchInfo=data
+    state.searchList=data
   }
 }
 
 const actions={
   async getSearchInfo({commit},params={}){
     let result= await reqGetSearchInfo(params);
-    console.log(result)
     if(result.code==200){
       commit('GETSEARCHINFO',result.data,{})
     }
@@ -21,7 +20,15 @@ const actions={
 }
 
 const getters={
-
+  goodsList(state){
+    return state.searchList.goodsList||[]
+  },
+  tradeMarkList(state){
+    return state.searchList.trademarkList||[]
+  },
+  attrsList(state){
+    return state.searchList.attrsList||[]
+  }
 }
 
 export default {

@@ -15,7 +15,7 @@
                      :class="{cur:currentindex==index}">
                   <h3 @mouseenter="changeIndex(index)">
                     <a :data-categoryName='c1.categoryName'
-                       :data-category1id='c1.categoryName'>{{c1.categoryName}}</a>
+                       :data-category1id='c1.categoryId'>{{c1.categoryName}}</a>
                   </h3>
                   <div class="item-list clearfix"
                        :style="{display:currentindex==index?'block':'none'}">
@@ -25,13 +25,13 @@
                           :key=c2.categoryId>
                         <dt>
                           <a :data-categoryName='c2.categoryName'
-                             :data-category2id='c2.categoryName'>{{c2.categoryName}}</a>
+                             :data-category2id='c2.categoryId'>{{c2.categoryName}}</a>
                         </dt>
                         <dd>
                           <em v-for='c3 in c2.categoryChild'
                               :key=c3.categoryId>
                             <a :data-categoryName='c3.categoryName'
-                               :data-category3id='c3.categoryName'>{{c3.categoryName}}</a>
+                               :data-category3id='c3.categoryId'>{{c3.categoryName}}</a>
                           </em>
                         </dd>
                       </dl>
@@ -101,10 +101,10 @@ export default {
           query.category1Id = category1id
         }
         else if (category2id) {
-          query.category1Id = category1id
+          query.category2Id = category2id
         }
         else {
-          query.category1Id = category1id
+          query.category3Id = category3id
         }
         
           location.params=this.$route.params
