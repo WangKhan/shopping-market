@@ -11,9 +11,15 @@
             </li>
           </ul>
           <ul class="fl sui-tag">
-            <li class="with-x" v-if='searchParams.categoryName'>{{searchParams.categoryName}}<i @click='removeCategoryName'>x</i></li>
-            <li class="with-x" v-if='searchParams.keyword'>{{searchParams.keyword}}<i @click='removeKeyword'>x</i></li>
-            <li class="with-x" v-if='searchParams.trademark'>{{searchParams.trademark.split(':')[1]}}<i @click='removeTradeMark'>x</i></li>
+            <li class="with-x"
+                v-if='searchParams.categoryName'>{{searchParams.categoryName}}<i @click='removeCategoryName'>x</i></li>
+            <li class="with-x"
+                v-if='searchParams.keyword'>{{searchParams.keyword}}<i @click='removeKeyword'>x</i></li>
+            <li class="with-x"
+                v-if='searchParams.trademark'>{{searchParams.trademark.split(':')[1]}}<i @click='removeTradeMark'>x</i></li>
+            <li class="with-x"
+                v-for='(item,index) in searchParams.props'
+                :key='index'>{{item.split(':')[1]}}<i @click='removeAttr(index)'>x</i></li>
             <!-- <li class="with-x" v-show='searchParams.category1Id'>{{searchParams.category1Id}}</li>
             <li class="with-x" v-show='searchParams.category2Id'>{{searchParams.category2Id}}</li>
             <li class="with-x" v-show='searchParams.category3Id'>{{searchParams.category3Id}}</li> -->
@@ -21,7 +27,8 @@
         </div>
         <!-- emit实验部分 -->
         <!--selector-->
-        <SearchSelector @changeTrademark='changeTrademark'/>
+        <SearchSelector @changeTrademark='changeTrademark'
+                        @addItem='addItem' />
         <!--details-->
         <div class="details clearfix">
           <div class="sui-navbar">
@@ -149,9 +156,9 @@ export default {
   watch: {
     $route: {
       handler (newValue, oldValue) {
-        this.searchParams.category1Id=undefined
-        this.searchParams.category2Id=undefined
-        this.searchParams.category3Id=undefined
+        this.searchParams.category1Id = undefined
+        this.searchParams.category2Id = undefined
+        this.searchParams.category3Id = undefined
         Object.assign(this.searchParams, this.$route.query, this.$route.params)
         this.getData()
       },
@@ -165,26 +172,37 @@ export default {
     getData () {
       this.$store.dispatch('getSearchInfo', this.searchParams)
     },
-    removeCategoryName(){
-      this.searchParams.categoryName=undefined
-      this.searchParams.category1Id=undefined
-      this.searchParams.category2Id=undefined
-      this.searchParams.category3Id=undefined
+    removeCategoryName () {
+      this.searchParams.categoryName = undefined
+      this.searchParams.category1Id = undefined
+      this.searchParams.category2Id = undefined
+      this.searchParams.category3Id = undefined
       this.getData()
-      this.$router.push({name:'search',params:this.$route.params})
+      this.$router.push({ name: 'search', params: this.$route.params })
     },
-    removeKeyword(){
-      this.searchParams.keyword=undefined,
-      this.getData()
-      this.$router.push({name:'search',query:this.$route.query})
+    removeKeyword () {
+      this.searchParams.keyword = undefined,
+        this.getData()
+      this.$router.push({ name: 'search', query: this.$route.query })
       this.$bus.$emit('clear');
     },
-    removeTradeMark(){
-      this.searchParams.trademark=undefined,
+    removeTradeMark () {
+      this.searchParams.trademark = undefined,
+        this.getData()
+    },
+    changeTrademark (id, name) {
+      this.searchParams.trademark = `${id}:${name}`
       this.getData()
     },
-    changeTrademark(id,name){
-      this.searchParams.trademark=`${id}:${name}`
+    addItem (wrap, item) {
+      let prop=`${wrap.attrId}:${item}:${wrap.attrName}`
+      if (this.searchParams.props.indexOf(prop) == -1) {
+        this.searchParams.props.push(prop)
+        this.getData()
+      }
+    },
+    removeAttr (index) {
+      this.searchParams.props.splice(index, 1);
       this.getData()
     }
   }

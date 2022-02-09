@@ -18,7 +18,7 @@
       <div class="fl value">
         <ul class="type-list">
           <li v-for="(item,index) in wrap.attrValueList" :key='index'>
-            <a>{{item}}</a>
+            <a @click="addItem(wrap,item)">{{item}}</a>
           </li>
           
         </ul>
@@ -38,6 +38,9 @@ export default {
   methods:{
     addTrademark(id,name){
       this.$emit('changeTrademark',id,name)
+    },
+    addItem(wrap,item){
+      this.$emit('addItem',wrap,item)
     }
   }
   //实验emit部分，之后删除
