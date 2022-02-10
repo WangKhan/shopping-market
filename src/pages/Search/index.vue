@@ -56,8 +56,7 @@
                   :key='good.id'>
                 <div class="list-wrap">
                   <div class="p-img">
-                    <a href="item.html"
-                       target="_blank"><img :src="good.defaultImg" /></a>
+                   <router-link :to='`/detail/${good.id}`' ><img :src="good.defaultImg" /></router-link>
                   </div>
                   <div class="price">
                     <strong>
@@ -159,12 +158,12 @@ export default {
       this.searchParams.category2Id = undefined
       this.searchParams.category3Id = undefined
       this.getData()
-      this.$router.push({ name: 'search', params: this.$route.params })
+      if(this.$route.params)  this.$router.push({ name: 'search', params: this.$route.params })
     },
     removeKeyword () {
       this.searchParams.keyword = undefined,
         this.getData()
-      this.$router.push({ name: 'search', query: this.$route.query })
+      if (this.$route.query) this.$router.push({ name: 'search', query: this.$route.query })
       this.$bus.$emit('clear');
     },
     removeTradeMark () {

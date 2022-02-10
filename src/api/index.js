@@ -17,3 +17,5 @@ export const reqFloor =()=>{
 }
 
 export const reqGetSearchInfo = (params)=>requests({url:'/list',method:'post',data:params})
+
+export const reqDetail = (params)=> requests({url:`/item/${params}`,method:'get'})
