@@ -1,7 +1,8 @@
-import { reqDetail } from "@/api";
-
+import { reqDetail,reqUpdateShopCart } from "@/api";
+import {uuid_token} from '@/utils/uuid_token'
 const state={
-  detail:{}
+  detail:{},
+  uuid_token:uuid_token(),
 }
 
 const mutations={
@@ -16,6 +17,16 @@ const actions={
     if(result.code==200){
       commit('GETDETAIL',result.data)
     }
+  },
+  async UpdateGoods({commit},{skuId,skuNum}){
+    let result=await reqUpdateShopCart(skuId,skuNum)
+    if(result.code==200){
+      return 'success'
+    }
+    else{
+      return Promise.reject(new Error('fail'))
+    }
+    
   }
 }
 

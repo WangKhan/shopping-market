@@ -77,14 +77,14 @@
             <div class="cartWrap">
               <div class="controls">
                 <input autocomplete="off"
-                       class="itxt">
+                       class="itxt" v-model="skuNum" @change="changeSkuNum">
                 <a href="javascript:"
-                   class="plus">+</a>
+                   class="plus" @click="skuNum++">+</a>
                 <a href="javascript:"
-                   class="mins">-</a>
+                   class="mins" @click="skuNum>1?skuNum--:skuNum">-</a>
               </div>
               <div class="add">
-                <a href="javascript:">加入购物车</a>
+                <a href="javascript:" @click="addShopcart">加入购物车</a>
               </div>
             </div>
           </div>
@@ -349,7 +349,11 @@ import { mapGetters } from 'vuex'
 
 export default {
   name: 'Detail',
-
+  data(){
+    return {
+      skuNum:1
+    }
+  },
   components: {
     ImageList,
     Zoom
@@ -369,6 +373,27 @@ export default {
         item.isChecked='0'
       });
       att.isChecked='1'
+    },
+    changeSkuNum(event){
+      let num=event.target.value
+      let res=num*1
+      if(isNaN(res)||res<1){
+        this.skuNum=1
+      }
+      else{
+        this.skuNum=parseInt(res)
+      }
+    },
+    async addShopcart(){
+      try{
+        await this.$store.dispatch('UpdateGoods',{skuId:this.$route.params.skuid,skuNum:this.skuNum})
+        //这里需要进行路由传参，但是传递的参数是一个对象，地址栏看起来不整洁，需要其他方式进行路由传参，选择本地存储
+        this.$router.push({path:'/addcartsuccess',query:{skuNum:this.skuNum}})
+        localStorage.setItem('GOODINFO',JSON.stringify(this.skuInfo))
+      }
+      catch(error){
+        alert(error.message)
+      }
     }
   }
 }
