@@ -46,7 +46,7 @@ const actions = {
   async allChecked({dispatch,state},isChecked){
     let promiseAll = [];
     state.cartlist[0].cartInfoList.forEach((item) => {
-      let promise = dispatch("cartChecked", {
+      let promise = item.isChecked==isChecked?'':dispatch("cartChecked", {
         skuId: item.skuId,
         isChecked,
       });
