@@ -23,3 +23,7 @@ export const reqDetail = (params)=> requests({url:`/item/${params}`,method:'get'
 export const reqUpdateShopCart= (skuId,skuNum)=>requests({url:`/cart/addToCart/${ skuId }/${ skuNum }`,method:'post'})
 
 export const reqCartList =()=> requests({url:'/cart/cartList',method:'get'})
+
+export const reqDelCart =(skuId)=> requests({url:`/cart/deleteCart/${skuId}`,method:'DELETE'})
+
+export const reqCartChecked = (skuId,isChecked)=> requests({url:`/cart/checkCart/${skuId}/${isChecked}`,method:'get'})

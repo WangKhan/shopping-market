@@ -26,7 +26,6 @@ const actions={
     else{
       return Promise.reject(new Error('fail'))
     }
-    
   }
 }
 

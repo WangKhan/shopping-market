@@ -11,10 +11,13 @@
         <div class="cart-th6">操作</div>
       </div>
       <div class="cart-body">
-        <ul class="cart-list" v-for="(good,index) in cartInfoList" :key='index'>
+        <ul class="cart-list"
+            v-for="(good,index) in cartInfoList"
+            :key='index'>
           <li class="cart-list-con1">
             <input type="checkbox"
-                   name="chk_list" :checked='good.isChecked'>
+                   name="chk_list"
+                   :checked='good.isChecked' @change="changeChecked(good.skuId,good.isChecked)">
           </li>
           <li class="cart-list-con2">
             <img :src="good.imgUrl">
@@ -25,40 +28,42 @@
           </li>
           <li class="cart-list-con5">
             <a href="javascript:void(0)"
-               class="mins">-</a>
+               class="mins"
+               @click="changeNum('minus',good)">-</a>
             <input autocomplete="off"
                    type="text"
                    :value="good.skuNum"
                    minnum="1"
-                   class="itxt">
+                   class="itxt"
+                   @change="changeNum('change',good,$event.target.value*1)">
             <a href="javascript:void(0)"
-               class="plus">+</a>
+               class="plus"
+               @click="changeNum('add',good)">+</a>
           </li>
           <li class="cart-list-con6">
             <span class="sum">{{good.skuNum*good.skuPrice}}</span>
           </li>
           <li class="cart-list-con7">
-            <a href="#none"
-               class="sindelet">删除</a>
+            <a class="sindelet"
+               @click="delCart(good.skuId)">删除</a>
             <br>
             <a href="#none">移到收藏</a>
           </li>
         </ul>
 
-
-        
       </div>
     </div>
     <div class="cart-tool">
       <div class="select-all">
         <input class="chooseAll"
-               type="checkbox" :checked='isAllChecked'>
-        <span>全选</span>
+               type="checkbox"
+               :checked='isAllChecked&&cartInfoList.length>0' @change="allChecked">
+        <span >全选</span>
       </div>
       <div class="option">
-        <a href="#none">删除选中的商品</a>
-        <a href="#none">移到我的关注</a>
-        <a href="#none">清除下柜商品</a>
+        <a  @click="delAllSelected">删除选中的商品</a>
+        <a >移到我的关注</a>
+        <a >清除下柜商品</a>
       </div>
       <div class="money-box">
         <div class="chosed">已选择
@@ -79,7 +84,8 @@
 </template>
 
 <script>
-import {mapGetters, MapGetters} from 'vuex'
+import { mapGetters} from 'vuex'
+import throttle from 'lodash/throttle'
 export default {
   name: 'ShopCart',
   mounted () {
@@ -88,22 +94,76 @@ export default {
   methods: {
     getData () {
       this.$store.dispatch('getCartList')
+    },
+    changeNum: throttle(async function (type, good, num = 0) {
+      if (type == 'add') num = 1;
+      else if (type == 'minus') {
+        if (good.skuNum > 1) num = -1
+      }
+      else if (type == 'change') {
+        if (isNaN(num) || num < 1) num = 0
+        else {
+          num = parseInt(num) - good.skuNum
+        }
+      }
+      try {
+        await this.$store.dispatch('UpdateGoods', { skuId: good.skuId, skuNum: num })
+        this.getData()
+      } catch (error) {
+
+      }
+    }, 1000),
+    delCart: throttle(async function (skuId) {
+      try {
+        await this.$store.dispatch('delCart', skuId)
+        this.getData()
+      }
+      catch (error) {
+
+      }
+    }, 1000),
+    changeChecked: throttle(async function(skuId,isChecked){
+      try {
+        await this.$store.dispatch('cartChecked',{skuId:skuId,isChecked:isChecked=='1'?'0':'1'})
+        this.getData()
+      } catch (error) {
+        
+      }
+    },1000),
+    async delAllSelected(){
+      
+      try {
+        await this.$store.dispatch('delAllSelected')
+        this.getData()
+      } catch (error) {
+        
+      }
+    },
+    async allChecked(event){
+      try {
+        let isChecked = event.target.checked ? "1" : "0";
+        await this.$store.dispatch("allChecked", isChecked);
+        this.getData();
+      } catch (error) {
+        alert(error.message);
+      }
     }
   },
-  computed:{
+  computed: {
     ...mapGetters(['getCartList']),
-    cartInfoList(){
-      return this.getCartList.cartInfoList||[]
+    cartInfoList () {
+      return this.getCartList.cartInfoList || []
     },
-    totalPrice(){
-      let sum=0
+    totalPrice () {
+      let sum = 0
       this.cartInfoList.forEach(item => {
-        sum+=item.skuNum*item.skuPrice
+        if(item.isChecked=='1')
+        sum += item.skuNum * item.skuPrice
       });
-      return  sum
+      return sum
     },
-    isAllChecked(){
-      return this.cartInfoList.every(item=>item.isChecked==1)
+    isAllChecked () {
+      return this.cartInfoList.every(item => item.isChecked == 1)
     }
   }
 }
