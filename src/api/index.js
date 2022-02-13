@@ -31,3 +31,5 @@ export const reqCartChecked = (skuId,isChecked)=> requests({url:`/cart/checkCart
 export const reqAuthorizeCode =(phone)=> requests({url:`/user/passport/sendCode/${phone}`,method:'get'})
 
 export const reqRegisterUser = (params)=> requests({url:'/user/passport/register',method:'post',data:params})
+
+export const reqLogin =(params)=> requests({url:'/user/passport/login',method:'post',data:params})

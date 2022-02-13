@@ -1,12 +1,16 @@
-import { reqAuthorizeCode,reqRegisterUser } from "@/api";
+import { reqAuthorizeCode,reqRegisterUser,reqLogin } from "@/api";
 
 const state = {
-  verificationCode:''
+  verificationCode:'',
+  token:''
 }
 
 const mutations = {
   GETVERIFICATIONCODE(state,data){
     state.verificationCode=data
+  },
+  GETLOGINUSER(state,token){
+    state.token=token
   }
 }
 
@@ -24,6 +28,15 @@ const actions = {
     }
     else{
       return Promise.reject(new error('fail'))
+    }
+  },
+  async loginUser({commit},params){
+    let result= await reqLogin(params)
+    if(result.code==200){
+      commit('GETLOGINUSER',result.data.token)
+    }
+    else{
+      return Promise.reject(new Error('fail'))
     }
   }
 }
