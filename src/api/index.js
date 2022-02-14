@@ -33,3 +33,11 @@ export const reqAuthorizeCode =(phone)=> requests({url:`/user/passport/sendCode/
 export const reqRegisterUser = (params)=> requests({url:'/user/passport/register',method:'post',data:params})
 
 export const reqLogin =(params)=> requests({url:'/user/passport/login',method:'post',data:params})
+
+export const reqUserInfo =()=>requests({url:'/user/passport/auth/getUserInfo',method:'get'})
+
+export const reqLogOut =()=>requests({url:'/user/passport/logout',method:'get'})
+
+export const reqOrderInfo= ()=>requests({url:'/order/auth/trade',method:'get'})
+
+export const reqUserAddress = ()=> requests({url:'/user/userAddress/auth/findUserAddressList'})

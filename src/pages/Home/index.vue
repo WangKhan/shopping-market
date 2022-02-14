@@ -1,12 +1,14 @@
 <template>
   <div class="container">
-    <TypeNav/>
-    <ListContainer/>
-    <TodayRecommend/>
-    <Rank/>
-    <Like/>
-    <Floor v-for="(fl) in floor" :key='fl.id' :list='fl'/>
-    <Brand/>
+    <TypeNav />
+    <ListContainer />
+    <TodayRecommend />
+    <Rank />
+    <Like />
+    <Floor v-for="(fl) in floor"
+           :key='fl.id'
+           :list='fl' />
+    <Brand />
   </div>
 </template>
 
@@ -17,9 +19,9 @@ import Rank from '@/pages/Home/Rank'
 import Like from '@/pages/Home/Like'
 import Floor from '@/pages/Home/Floor'
 import Brand from '@/pages/Home/Brand'
-import {mapState} from 'vuex'
+import { mapState } from 'vuex'
 export default {
-  data() {
+  data () {
     return {
 
     }
@@ -32,18 +34,18 @@ export default {
     Floor,
     Brand
   },
-  computed:{
+  computed: {
     ...mapState({
-      floor:(state)=> state.home.floor
+      floor: (state) => state.home.floor
     }
     )
   },
-  mounted(){
+  mounted () {
     this.$store.dispatch('getFloor')
+    
   }
 }
 </script>
 
 <style scoped lang="less">
-
 </style>

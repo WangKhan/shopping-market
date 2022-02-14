@@ -6,16 +6,20 @@
         <div class="container">
           <div class="loginList">
             <p>尚品汇欢迎您！</p>
-            <p>
+            <p v-if='!userName'>
               <span>请</span>
               <router-link to='/login'>登录</router-link>
               <router-link class="register"
                            to='/register'>免费注册</router-link>
             </p>
+            <p v-else>
+              <a>{{userName}}</a>
+              <a class="register" @click='logOut'>退出登录</a>
+            </p>
           </div>
           <div class="typeList">
             <a href="###">我的订单</a>
-            <a href="###">我的购物车</a>
+            <router-link to="/shopcart">我的购物车</router-link>
             <a href="###">我的尚品汇</a>
             <a href="###">尚品汇会员</a>
             <a href="###">企业采购</a>
@@ -64,6 +68,14 @@ export default {
       let location = { name: 'search', params: { keyword: this.keyword || undefined } }
       location.query = this.$route.query
       this.$router.push(location)
+    },
+    async logOut(){
+      try {
+        await this.$store.dispatch('getLogOut')
+        this.$router.push('/home')
+      } catch (error) {
+        alert(error.message)
+      }
     }
   },
   components: {
@@ -73,6 +85,11 @@ export default {
     this.$bus.$on('clear', () => {
       this.keyword = ''
     })
+  },
+  computed: {
+    userName () {
+      return this.$store.state.user.userInfo.nickName
+    }
   }
 }
 </script>
