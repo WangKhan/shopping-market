@@ -142,13 +142,14 @@ export default {
         "orderDetailList": this.orderInfo.detailArrayList
         }
       let result=await this.$api.reqSubmitOrder(tradeNo,data)
+      console.log(result)
       if(result.code==200){
         this.orderId=result.data
+        this.$router.push('/pay?orderId='+this.orderId)
       }
       else{
-        alert(result.data)
+        alert(result.message)
       }
-      this.$router.push('/pay?orderId='+this.orderId)
     }
   }
 }

@@ -7,6 +7,10 @@ import store from'@/store'
 import '@/mock/mockServe'
 import 'swiper/css/swiper.css'
 import * as API from '@/api'
+import { Button,MessageBox } from 'element-ui';
+Vue.component(Button.name, Button);
+Vue.prototype.$msgbox = MessageBox;
+Vue.prototype.$alert = MessageBox.alert;
 Vue.component(TypeNav.name,TypeNav)
 Vue.component(Carousel.name,Carousel)
 Vue.component(Pagination.name,Pagination)

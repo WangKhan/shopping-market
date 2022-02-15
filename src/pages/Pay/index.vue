@@ -66,7 +66,7 @@
 
         <div class="submit">
           <a class="btn"
-                       @click="pay">立即支付</a>
+             @click="pay">立即支付</a>
         </div>
         <div class="otherpay">
           <div class="step-tit">
@@ -84,11 +84,14 @@
 </template>
 
 <script>
+import QRCode from 'qrcode'
 export default {
   name: 'Pay',
   data () {
     return {
-      payInfo:{}
+      payInfo: {},
+      timer: null,
+      code: ''
     }
   },
   computed: {
@@ -102,11 +105,48 @@ export default {
   methods: {
     async getPayInfo () {
       let result = await this.$api.reqPayInfo(this.orderId);
-      if(result.code==200){
-        this.payInfo=result.data
+      if (result.code == 200) {
+        this.payInfo = result.data
       }
-      else{
+      else {
         alert(result.data)
+      }
+    },
+    async pay () {
+      console.log(this.payInfo.codeUrl)
+      let result = await QRCode.toDataURL(this.payInfo.codeUrl)
+      this.$alert(`<img src='${result}'}></img>`, '请你微信扫码支付', {
+        dangerouslyUseHTMLString: true,
+        center: true,
+        showCancelButton: true,
+        cancelButtonText: '支付遇到问题',
+        confirmButtonText: '支付成功',
+        showClose: false,
+        beforeClose: (type, instance, done) => {
+          if (type == 'cancel') {
+            alert('quxiao')
+            clearInterval(this.timer)
+            this.timer = null
+            done()
+          }
+          else {
+            clearInterval(this.timer)
+            this.timer = null
+            done()
+            this.$router.push('/paysuccess')
+          }
+        }
+      });
+      if (!this.timer) {
+        this.timer = setInterval(async () => {
+          let result = await this.$api.reqPayStatus(this.orderId)
+          if (result.code == 200) {
+            this.timer = null
+            this.code = result.code
+            this.$msgbox.close()
+            this.$router.push('/paysuccess')
+          }
+        }, 1000)
       }
     }
   }
