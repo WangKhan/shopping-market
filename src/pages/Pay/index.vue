@@ -113,7 +113,6 @@ export default {
       }
     },
     async pay () {
-      console.log(this.payInfo.codeUrl)
       let result = await QRCode.toDataURL(this.payInfo.codeUrl)
       this.$alert(`<img src='${result}'}></img>`, '请你微信扫码支付', {
         dangerouslyUseHTMLString: true,

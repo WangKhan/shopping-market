@@ -1,4 +1,4 @@
-import Home from '@/pages/Home'
+
 import Search from '@/pages/Search'
 import Login from '@/pages/Login'
 import Register from '@/pages/Register'
@@ -14,7 +14,7 @@ import groupOrder from '@/pages/Center/groupOrder'
 export default [
   {
     path: '/home',
-    component: Home,
+    component:()=>import('@/pages/Home'),
     meta: {
       show: true
     }
@@ -71,6 +71,12 @@ export default [
     component: Trade,
     meta: {
       show: true
+    },
+    beforeEnter:(to,from,next)=>{
+      if(from.path=='/shopcart') next()
+      else{
+        next(false)
+      }
     }
   },
   {
@@ -78,6 +84,12 @@ export default [
     component: Pay,
     meta: {
       show: true
+    },
+    beforeEnter:(to,from,next)=>{
+      if(from.path=='/trade') next()
+      else{
+        next(false)
+      }
     }
   },
   {
@@ -85,6 +97,12 @@ export default [
     component: PaySuccess,
     meta: {
       show: true
+    },
+    beforeEnter:(to,from,next)=>{
+      if(from.path=='/pay') next()
+      else{
+        next(false)
+      }
     }
   }, 
   {

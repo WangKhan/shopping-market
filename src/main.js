@@ -7,6 +7,7 @@ import store from'@/store'
 import '@/mock/mockServe'
 import 'swiper/css/swiper.css'
 import * as API from '@/api'
+import '@/plugins/validate.js'
 import { Button,MessageBox } from 'element-ui';
 Vue.component(Button.name, Button);
 Vue.prototype.$msgbox = MessageBox;
@@ -16,6 +17,11 @@ Vue.component(Carousel.name,Carousel)
 Vue.component(Pagination.name,Pagination)
 import router from '@/router'
 Vue.config.productionTip = false
+import VueLazyload from 'vue-lazyload'
+import wcl from '@/assets/350px-Wangcilang_full.png'
+Vue.use(VueLazyload, {
+  loading: wcl,
+})
 new Vue({
   render: h => h(App),
   beforeCreate(){
