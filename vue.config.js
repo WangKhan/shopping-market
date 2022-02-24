@@ -1,7 +1,7 @@
 module.exports = {
   lintOnSave: false,
   productionSourceMap: false,
-  publicPath: './',
+  publicPath: '/onlineshop',
   devServer: {
     proxy: {
       '/api': {

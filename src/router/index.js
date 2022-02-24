@@ -24,6 +24,7 @@ VueRouter.prototype.replace=function(location,resolve,reject){
   
 }
 let router= new VueRouter({
+  base:'/onlineshop',
   routes,
   scrollBehavior(){
     return {y:0}
